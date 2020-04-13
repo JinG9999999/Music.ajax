@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+
+<h2>添加唱片信息</h2>
+
+<table>
+    <tr>
+        <td>音乐名称</td>
+        <td><input id="corpName" type="text" /></td>
+    </tr>
+    <tr>
+        <td>唱片封面</td>
+        <td><input id="cover" type="text" /></td>
+    </tr>
+    <tr>
+        <td>唱片标签</td>
+        <td>
+            <input id="Checkbox1" type="checkbox" value="古典" /> 古典
+            <input id="Checkbox2" type="checkbox" value="现代" /> 现代
+            <input id="Checkbox3" type="checkbox" value="流行" /> 流行
+            <input id="Checkbox4" type="checkbox" value="爵士" /> 爵士
+            <input id="Checkbox5" type="checkbox" value="电音" /> 电音
+            <input id="Checkbox6" type="checkbox" value="韩语" /> 韩语
+            <input id="Checkbox7" type="checkbox" value="日语" /> 日语
+            <input id="Checkbox8" type="checkbox" value="法语" /> 法语
+            <input id="Checkbox9" type="checkbox" value="男声" /> 男声
+            <input id="Checkbox10" type="checkbox" value="组合" /> 组合
+            <input id="Checkbox11" type="checkbox" value="女声" /> 女声
+            <input id="Checkbox12" type="checkbox" value="纯音" /> 纯音
+        </td>
+    </tr>
+    <tr>
+        <td>制作人</td>
+        <td><input id="Maker" type="text" /></td>
+    </tr>
+    <tr>
+        <td>演唱</td>
+        <td><input id="Singer" type="text" /></td>
+    </tr>
+    <tr>
+        <td>音乐公司</td>
+        <td><input id="CorpModelCid" type="text" /></td>
+    </tr>
+    <tr>
+        <td>发布日期</td>
+        <td><input id="ReleaseDate" type="text" onclick="WdatePicker()" /></td>
+    </tr>
+    <tr>
+        <td>价格</td>
+        <td><input id="Price" type="text" /></td>
+    </tr>
+    <tr>
+        <td>添加人</td>
+        <td>
+            <input id="maker" type="text" />
+        </td>
+    </tr>
+    <tr>
+        <td>唱片详情</td>
+        <td>
+            <textarea id="CdDetail" rows="2" cols="20"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input id="Submit1" type="submit" value="添加" onclick="Add()" /></td>
+        <td></td>
+    </tr>
+</table>
+
+@section scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Content/My97DatePicker/WdatePicker.js"></script>
+    <script>
+        function Add() {
+            var obj = {};
+            obj.CorpName = $("#corpName").val();
+            obj.Cover = $("#cover").val();
+            obj.Tags
+            obj.Maker
+            obj.Singer
+            obj.CorpModels.CorpName
+            obj.CorpModels.Location
+            obj.ReleaseDate
+            obj.Price
+            obj.Adder
+            obj.CdDetail
+
+
+            $.ajax({
+                url: 'http://localhost:57338/api/music/',
+                type: 'post',
+                dataType: 'json',
+                success: function (d) {
+                    alert("添加成功");
+                    location.href = '/nusic/Show';
+                }
+
+            })
+
+
+        }
+    </script>
+}

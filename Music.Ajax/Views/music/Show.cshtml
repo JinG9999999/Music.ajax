@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>唱片管理</h2>
+<table>
+    <tr>
+        <td>
+            音乐名称：
+            <input id="Name" type="text" name="Name" />
+        </td>
+
+        <td>
+            唱片公司：
+            <select id="Select1"></select>
+        </td>
+
+        <td><input id="Submit1" type="submit" value="查询" onclick="show()" /></td>
+        <td><input id="Submit1" type="submit" value="添加" onclick="location.href='/music/Add'" class="btn btn-default" /></td>
+    </tr>
+</table>
+
+
+
+<table class="table table-bordered">
+    <thead style="background-color:gray">
+        <tr>
+            <th>编号</th>
+            <th>音乐名称</th>
+            <th>唱片封面</th>
+            <th>唱片标签</th>
+            <th>制作人</th>
+            <th>演唱</th>
+            <th>音乐公司</th>
+            <th>公司地址</th>
+            <th>发布日期</th>
+            <th>价格</th>
+            <th>添加人</th>
+            <th>唱片详情</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody id="tb"></tbody>
+</table>
+
+<table class="table">
+    <tr>
+        <td>总共 <span id="TotalConut">0</span>记录</td>
+        <td>总共 <span id="TotalPage">1</span>页</td>
+        <td>当前 <span id="currentPage">1</span>页</td>
+        <td> <a href="javascrpt:;" onclick="show(1);">首页</a></td>
+        <td> <a href="javascrpt:;" onclick="show(currentPage-1);">上一页</a></td>
+        <td> <a href="javascrpt:;" onclick="show(currentPage+1);">下一页</a></td>
+        <td> <a href="javascrpt:;" onclick="show(TotalPage);">尾页</a></td>
+        <td> </td>
+    </tr>
+</table>
+
+@section scripts{
+    <script>
+        $(function () {
+            bandsel();
+        })
+        function bandsel() {
+            $.ajax({
+                url: 'http://localhost:57338/api/corp/',
+                type: 'get',
+                dataType: 'json',
+                success: function (d) {
+
+                    $("#Select1").append("<option value=''>--请选择--</option>")
+                    $(d).each(function () {
+                        var opt = "<option value='" + this.Cid + "'>" + this.CorpName + "</option>"
+                        $("#Select1").append(opt);
+                    })
+                    show(1);
+                }
+            })
+        }
+
+        function show(page) {
+            var PageSize = 3;
+            var TotalPage = 1;
+            var currentPage = 1;
+
+            $.ajax({
+                url: 'http://localhost:57338/api/music',
+                type: 'get',
+                dataType: 'json',
+                data: { Name: $("#Name").val(), Cid: $("#Select1").val(), index: page, PageSize: PageSize },
+                success: function (d) {
+                    TotalPage = d.TotalPage;
+                    currentPage = d.currentPage;
+                    $("#TotalConut").html(d.TotalConut);
+                    $("#TotalPage").html(d.TotalPage);
+                    $("#currentPage").html(d.currentPage);
+
+                    $("#tb").empty();
+                    $(d.musics).each(function () {
+                        var line = '<tr>'
+                            + '<td>' + this.Mid                 + '</td>'
+                            + '<td>' + this.CorpName            + '</td>'
+                            + '<td>' + this.Cover               + '</td>'
+                            + '<td>' + this.Tags                + '</td>'
+                            + '<td>' + this.Maker               + '</td>'
+                            + '<td>' + this.Singer              + '</td>'
+                            + '<td>' + this.CorpModels.CorpName + '</td>'
+                            + '<td>' + this.CorpModels.Location + '</td>'
+                            + '<td>' + this.ReleaseDate         + '</td>'
+                            + '<td>' + this.Price               + '</td>'
+                            + '<td>' + this.Adder               + '</td>'
+                            + '<td>' + this.CdDetail            + '</td>'
+                            + '<td>' + '<a href=/music/Upt/' + this.Mid + '>编辑</a>'
+                            + '|' + '<a href=/music/Upt/' + this.Mid + '>详情</a>'
+                            + '|' + '<a href=javascript:; onclick=Del(' + this.Mid + ') >删除</a> '
+                            + '</td>'
+                            + '</tr>';
+                        $("#tb").append(line);
+                    })
+                }
+            })
+        }
+
+        function Del(id) {
+            if (confirm("确认删除吗？")) {
+                $.ajax({
+                    url: 'http://localhost:57338/api/music/' + id,
+                    type: 'delete',
+                    dataType: 'json',
+                    success: function (d) {
+                        alert("删除成功");
+                        location.href = '/nusic/Show';
+                    }
+
+                })
+            }
+
+        }
+    </script>
+}

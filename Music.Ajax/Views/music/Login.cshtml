@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>在线音乐系统登录</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <td>用户姓名</td>
+        <td><input id="UserName" type="text" /></td>
+    </tr>
+    <tr>
+        <td>用户密码</td>
+        <td><input id="Password" type="text" /></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input id="Submit1" type="submit" value="登录" class="btn btn-primary" onclick="Login()" /></td>
+        <td></td>
+    </tr>
+</table>
+
+@section scripts{
+    <script>
+        function Login() {
+            $.ajax({
+                url: 'http://localhost:57338/api/user/',
+                type: 'post',
+                dataType: 'json',
+                data: { UserName: $("#UserName").val(), Password: $("#Password").val() },
+                success: function (d) {
+                    if (d > 0) {
+                        alert("登录成功");
+                        document.cookie = $("#UserName").val();
+                        location.href = "/music/Show";
+                    }
+                    else {
+                        alert("登录失败");
+                        location.href = "/music/Login";
+                    }
+                }
+            })
+        }
+    </script>
+}
